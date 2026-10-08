@@ -107,7 +107,7 @@ export default function Dashboard() {
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8 lg:py-10">
           <div className="flex min-h-[520px] flex-col justify-between">
             <div>
-              <p className="label text-spruce">EliseAI internal property intelligence</p>
+              <p className="label text-spruce">SDR lead research workspace</p>
               <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-normal text-graphite sm:text-5xl lg:text-6xl">
                 Turn inbound property leads into sales-ready outreach.
               </h1>

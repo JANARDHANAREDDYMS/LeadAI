@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import AgentOutputsPage from "./pages/AgentOutputsPage";
 import SettingsPage from "./pages/SettingsPage";
 import ScoringMethodologyPage from "./pages/ScoringMethodologyPage";
-import eliseLogo from "./assets/elise-ai-logo.png";
+import leadLogo from "./assets/lead-research-logo.svg";
 
 const NAV = [
   { to: "/",         label: "Dashboard", icon: LayoutDashboard },
@@ -38,13 +38,13 @@ export default function App() {
             <Link to="/">
               <img
                 className="h-9 w-auto shrink-0 object-contain object-left"
-                src={eliseLogo}
-                alt="EliseAI"
+                src={leadLogo}
+                alt="LeadAI"
               />
             </Link>
             <div className="ml-8">
               <p className="text-sm font-semibold leading-4 text-graphite">LeadAI</p>
-              <p className="text-xs text-ink/60">Internal property-management workspace</p>
+              <p className="text-xs text-ink/60">SDR lead research workspace</p>
             </div>
           </div>
 

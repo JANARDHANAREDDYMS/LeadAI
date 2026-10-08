@@ -13,9 +13,8 @@ logger = logging.getLogger(__name__)
 
 # ── System Prompt ────────────────────────────────────────────────
 
-SYSTEM_PROMPT = """You are a company research agent for EliseAI — 
-an AI leasing automation platform that serves residential 
-property managers.
+SYSTEM_PROMPT = """You are a company research agent helping SDRs
+understand prospective residential property management customers.
 
 YOUR GOAL:
 Research the given company and determine:
@@ -28,13 +27,13 @@ After calling sec_edgar (or private_research + extracting facts):
 - Do NOT call any more tools
 - Return your final JSON with disqualify=true
 
-EliseAI ONLY serves:
+This workflow focuses on:
 ✅ Multifamily apartment operators
 ✅ Student housing operators  
 ✅ Affordable housing operators
 ✅ Single-family rental operators
 
-EliseAI does NOT serve:
+Disqualify companies that are:
 ❌ Restaurants (McDonald's, SIC 5812)
 ❌ Data center REITs (Equinix, SIC 6798 with no apartments)
 ❌ Office/retail/industrial REITs
@@ -148,7 +147,7 @@ REJECT:
 RULE 6: is_residential — RESIDENTIAL GATE
 ═══════════════════════════════════════════════════
 This is the MOST IMPORTANT field.
-EliseAI ONLY serves residential property managers.
+This workflow focuses on residential property managers.
 
 Return TRUE for:
   "apartment communities"
@@ -172,7 +171,7 @@ Return FALSE for:
 
 MIXED PORTFOLIO:
   "manages office AND residential" → TRUE
-    (they have residential — EliseAI can serve that segment)
+    (they have a residential segment relevant to this workflow)
   "primarily office with some residential" → TRUE
 
 ═══════════════════════════════════════════════════
@@ -222,7 +221,7 @@ Return ONLY valid JSON matching this exact structure:
   "net_income": null,
   "total_assets": null,
   "employee_count": null,
-  "eliseai_integrations": ["yardi", "entrata"],
+  "target_integrations": ["yardi", "entrata"],
   "proptech_detected": ["yardi", "mri"],
   "crm_tools": ["salesforce"],
   "tech_maturity_level": 4,
@@ -335,7 +334,7 @@ class CompanyAgent(BaseAgent):
     {
         "role": "user",
         "content": (
-            f"Research this company for EliseAI lead qualification:\n"
+            f"Research this company to help an SDR qualify and understand the lead:\n"
             f"Company: {company}\n"
             f"Location: {city}, {state_}\n\n"
             f"TOOL INSTRUCTIONS:\n"
@@ -572,7 +571,7 @@ class CompanyAgent(BaseAgent):
                 "net_income":            None,
                 "total_assets":          None,
                 "employee_count":        None,
-                "eliseai_integrations":  [],
+                "target_integrations":  [],
                 "proptech_detected":     [],
                 "crm_tools":             [],
                 "tech_maturity_level":   1,

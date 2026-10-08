@@ -12,24 +12,12 @@ logger = logging.getLogger(__name__)
 # ── Scoring System Prompt ────────────────────────────────────────
 
 SCORING_SYSTEM_PROMPT = """You are an expert sales intelligence 
-analyst for EliseAI — an AI leasing automation platform that 
-serves residential property managers.
+analyst helping SDRs research and prioritize prospective customers.
 
 Your job: analyze enriched lead data and produce:
 1. A lead score 0-100
 2. A tier classification
 3. Sales insights for the SDR
-
-ELISEAI CONTEXT:
-EliseAI automates leasing communication, maintenance requests,
-and resident operations. Customers include Greystar, AvalonBay,
-Equity Residential, and 500+ operators.
-
-Products:
-- Conventional: AI-guided tours, 24/7 leasing, renewal automation
-- Affordable: Fair housing compliance, 51-language support
-- Student: Surge leasing, renewal campaigns
-- Single-family: Maintenance automation, resident communication
 
 SCORING FORMULA:
 You will receive pre-computed sub-scores. Use them as your
@@ -45,7 +33,7 @@ pain_score (0-30):
   maintenance_jobs >= 5: +8 pts
   maintenance_jobs >= 2: +4 pts
   no PropTech detected:  +7 pts
-  has PropTech no EliseAI: +3 pts
+  has PropTech no automation signal: +3 pts
   news pain signals:    +5 pts
 
 fit_score (0-25):
@@ -55,7 +43,7 @@ fit_score (0-25):
   is_public=True:       +8 pts
   company enterprise:   +7 pts
   company large:        +4 pts
-  eliseai_integrations: +7 pts
+  target_integrations: +7 pts
   proptech only:        +3 pts
 
 timing_score (0-25):
@@ -88,7 +76,7 @@ Always populate pain_evidence, fit_evidence, timing_evidence,
 market_evidence, contact_evidence with specific cited reasons.
 Always populate confidence and confidence_notes.
 
-Pain Score (0-30):      Do they NEED EliseAI right now?
+Pain Score (0-30):      What operational need does the prospect have?
 Fit Score (0-25):       Are they the right type of company?
 Timing Score (0-25):    Is NOW the right moment?
 Market Score (0-10):    Does their city create urgency?
@@ -130,7 +118,7 @@ RETURN ONLY VALID JSON — no markdown, no explanation:
     "pain_points": ["what hurts them NOW"],
     "timing_signals": ["why contact NOW"],
     "pitch_angle": "what to lead with in outreach",
-    "integration_hook": "EliseAI + their existing tools",
+    "integration_hook": "prospect's existing tools and workflows",
     "objection_prep": [
       {"objection": "...", "response": "..."},
       {"objection": "...", "response": "..."}
@@ -330,8 +318,8 @@ class ScoringAgent(BaseAgent):
         has_proptech = bool(
             company_data.get("proptech_detected", [])
         )
-        has_eliseai = bool(
-            company_data.get("eliseai_integrations", [])
+        has_target = bool(
+            company_data.get("target_integrations", [])
         )
 
         if not has_proptech:
@@ -343,10 +331,10 @@ class ScoringAgent(BaseAgent):
                 )
             else:
                 missing.append("Tech stack unverified")
-        elif not has_eliseai:
+        elif not has_target:
             score += 3
             evidence.append(
-                "Has PropTech but no EliseAI — "
+                "Has PropTech but may have a workflow gap — "
                 "automation gap exists"
             )
 
@@ -420,15 +408,15 @@ class ScoringAgent(BaseAgent):
         else:
             score += 1
 
-        # EliseAI integration match
-        eliseai = company_data.get("eliseai_integrations", [])
+        # target integration match
+        target = company_data.get("target_integrations", [])
         proptech = company_data.get("proptech_detected", [])
 
-        if eliseai:
+        if target:
             score += 7
             evidence.append(
-                f"Uses {eliseai} — "
-                f"EliseAI integrates natively — easy implementation"
+                f"Uses {target} — "
+                f"confirm integration support before discussing implementation"
             )
         elif proptech:
             score += 3
@@ -647,7 +635,7 @@ class ScoringAgent(BaseAgent):
         ) if key_facts else "None found"
 
         return f"""
-Score this lead for EliseAI sales qualification.
+Score this lead for SDR research and outreach prioritization.
 
 ═══════════════════════════════════════
 LEAD IDENTITY
@@ -672,7 +660,7 @@ Annual revenue:  {company_data.get('annual_revenue')}
 AUM:             {company_data.get('aum')}
 
 Tech maturity:   Level {company_data.get('tech_maturity_level')} — {company_data.get('tech_maturity_label')}
-EliseAI integrations: {company_data.get('eliseai_integrations')}
+target integrations: {company_data.get('target_integrations')}
 PropTech detected:    {company_data.get('proptech_detected')}
 
 Leasing jobs:    {company_data.get('leasing_jobs')}
@@ -701,8 +689,8 @@ Renter population:   {market_data.get('renter_population')}
 Leasing intensity:   {market_data.get('leasing_intensity')} ({market_data.get('leasing_intensity_score')}/100)
 Market health:       {market_data.get('market_health')} ({market_data.get('market_health_score')}/100)
 Population trend:    {market_data.get('population_trend')} ({market_data.get('population_change_pct')}%)
-EliseAI product line: {market_data.get('eliseai_product_line')}
-Pitch focus:         {market_data.get('eliseai_pitch_focus')}
+target product line: {market_data.get('target_product_line')}
+Pitch focus:         {market_data.get('target_pitch_focus')}
 
 ═══════════════════════════════════════
 PRE-COMPUTED SUB-SCORES

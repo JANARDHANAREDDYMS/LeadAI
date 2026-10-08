@@ -429,7 +429,7 @@ class FREDService:
 
         # ── Leasing intensity — NEW ─────────────────────────
         # Combines rent pressure + unemployment + population
-        # into one EliseAI-specific metric
+        # into one combined market metric
         leasing_score = 0
         leasing_evidence = []
 
@@ -501,7 +501,7 @@ class FREDService:
             "geography": "national",
             "geography_note": "City-specific rent data unavailable — using US national CPI",
 
-            # Leasing intensity — EliseAI specific
+            # Leasing intensity for residential prospect research
             "leasing_intensity":        leasing_intensity,
             "leasing_intensity_score":  leasing_score,
             "leasing_intensity_evidence": leasing_evidence,

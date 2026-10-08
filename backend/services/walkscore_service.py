@@ -161,7 +161,7 @@ class WalkScoreService:
         else:
             leasing_velocity = "low"
 
-        # ── EliseAI product fit from location ──────────────
+        # ── Property market context from location ─────────
         if urban_class in ["walker_paradise", "very_walkable"]:
             product_fit = "conventional_urban"
             automation_case = (

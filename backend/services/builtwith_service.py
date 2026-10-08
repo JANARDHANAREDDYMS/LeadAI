@@ -9,8 +9,8 @@ from config import settings
 logger = logging.getLogger(__name__)
 
 
-# ── PropTech tools EliseAI integrates with ─────────────────────
-ELISEAI_INTEGRATIONS = [
+# ── Property management platforms ──────────────────────────────
+PROPERTY_MANAGEMENT_TOOLS = [
     "yardi", "realpage", "entrata", "appfolio",
     "mri software", "resman", "knock", "funnel"
 ]
@@ -51,7 +51,7 @@ class BuiltWithService:
     Detects company tech stack from their domain.
     Uses BuiltWith free API — no key required for basic lookup.
     Used by Values Agent to detect PropTech adoption
-    and EliseAI integration opportunities.
+    and property management platform adoption.
     Fails gracefully — returns empty dict on any error.
     """
 
@@ -156,7 +156,7 @@ class BuiltWithService:
 
             # Check for known tools in page content
             all_tools = (
-                ELISEAI_INTEGRATIONS +
+                PROPERTY_MANAGEMENT_TOOLS +
                 CRM_TOOLS +
                 MARKETING_TOOLS +
                 ANALYTICS_TOOLS +
@@ -181,7 +181,7 @@ class BuiltWithService:
     ) -> dict:
         """
         Analyze tech stack data and extract
-        EliseAI-relevant signals.
+        sales research signals.
         """
 
         # ── Extract detected technologies ───────────────────
@@ -203,9 +203,9 @@ class BuiltWithService:
 
         detected_lower = [t.lower() for t in detected_techs]
 
-        # ── Check for EliseAI integrations ──────────────────
+        # ── Check for property management platforms ─────────
         integration_matches = [
-            tool for tool in ELISEAI_INTEGRATIONS
+            tool for tool in PROPERTY_MANAGEMENT_TOOLS
             if any(tool in t for t in detected_lower)
         ]
 
@@ -236,13 +236,12 @@ class BuiltWithService:
         if integration_matches:
             for tool in integration_matches:
                 talking_points.append(
-                    f"EliseAI has a native integration with {tool.title()} — "
-                    f"zero disruption to existing workflow"
+                    f"Uses {tool.title()} — verify available integrations and workflow fit"
                 )
         if crm_matches:
             talking_points.append(
                 f"Already using {crm_matches[0].title()} — "
-                f"EliseAI can sync lead data directly"
+                "may support connected lead workflows"
             )
         if not integration_matches and not crm_matches:
             talking_points.append(
@@ -254,11 +253,11 @@ class BuiltWithService:
             "company_name":             company_name,
             "domain":                   domain,
             "detected_technologies":    detected_techs[:20],
-            "eliseai_integrations":     integration_matches,
+            "property_management_tools": integration_matches,
             "crm_tools":                crm_matches,
             "analytics_tools":          analytics_matches,
             "automation_tools":         automation_matches,
-            "has_eliseai_integration":  len(integration_matches) > 0,
+            "has_property_management_platform": len(integration_matches) > 0,
             "tech_forward_score":       tech_score,
             "is_tech_forward":          tech_score >= 40,
             "talking_points":           talking_points,
@@ -274,11 +273,11 @@ class BuiltWithService:
             "company_name":             company_name,
             "domain":                   domain,
             "detected_technologies":    [],
-            "eliseai_integrations":     [],
+            "property_management_tools": [],
             "crm_tools":                [],
             "analytics_tools":          [],
             "automation_tools":         [],
-            "has_eliseai_integration":  False,
+            "has_property_management_platform": False,
             "tech_forward_score":       0,
             "is_tech_forward":          False,
             "talking_points":           [

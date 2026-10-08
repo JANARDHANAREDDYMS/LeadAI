@@ -18,7 +18,7 @@ SEC_EDGAR_TOOL = ToolDefinition(
         "Returns is_public=False if company is private. "
         "Also returns is_real_estate and is_residential — "
         "if is_residential=False, stop all research immediately. "
-        "EliseAI only serves residential property managers. "
+        "this research workflow focuses on residential property managers. "
         "Returns: is_public, is_real_estate, is_residential, "
         "revenue, units_managed, employees, ticker, "
         "company_size, recent_8k_events."

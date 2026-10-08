@@ -1,8 +1,6 @@
 # LeadAI
 
-LeadAI is an AI-powered lead enrichment and sales intelligence tool built for EliseAI-style inbound GTM workflows. It takes basic lead inputs, enriches them with public APIs and agentic research, scores each lead, explains the score, generates sales insights, and drafts personalized outreach for SDRs.
-
-The project was built for a GTM Engineer practical assignment: automate or augment the inbound lead process using public APIs, scoring assumptions, and outreach generation.
+LeadAI is an AI-powered lead research and sales intelligence tool built to help SDRs research prospects more efficiently. It takes basic lead inputs, enriches them with public data and research, scores each lead, explains the score, generates sales insights, and drafts personalized outreach.
 
 ## What It Does
 

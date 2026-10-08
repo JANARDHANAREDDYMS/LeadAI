@@ -78,7 +78,7 @@ class HUDService:
                     "📌"
                 )
             emit(
-                f"Product fit: {result['eliseai_product_fit']}",
+                f"Product fit: {result['target_product_fit']}",
                 " | ".join(result.get('pitch_implications', [])[:2]),
                 "🎯"
             )
@@ -311,14 +311,14 @@ class HUDService:
         for the Market Agent and Values Agent.
 
         Key output: is this an affordable housing market?
-        And if so, which EliseAI product line fits?
+        If so, identify the relevant housing category for outreach context.
         """
 
         # ── Affordable housing classification ──────────────
         affordable_signal = False
         affordable_confidence = "low"
         affordable_evidence = []
-        eliseai_product_fit = "conventional"  # default
+        target_product_fit = "conventional"  # default
 
         if fmr_data:
             fmr_2br = fmr_data.get("fmr_2br", 0)
@@ -332,7 +332,7 @@ class HUDService:
                 affordable_evidence.append(
                     f"2BR Fair Market Rent ${fmr_2br}/mo below $1,200 threshold"
                 )
-                eliseai_product_fit = "affordable"
+                target_product_fit = "affordable"
 
             elif fmr_2br and fmr_2br < 1800:
                 affordable_signal = True
@@ -340,7 +340,7 @@ class HUDService:
                 affordable_evidence.append(
                     f"2BR Fair Market Rent ${fmr_2br}/mo suggests workforce housing"
                 )
-                eliseai_product_fit = "workforce"
+                target_product_fit = "workforce"
 
             else:
                 affordable_evidence.append(
@@ -363,17 +363,17 @@ class HUDService:
                 if affordable_confidence == "low":
                     affordable_confidence = "medium"
 
-        # ── EliseAI pitch angle from HUD data ─────────────
+        # ── Outreach context from HUD data ─────────────────
         pitch_implications = []
 
-        if eliseai_product_fit == "affordable":
+        if target_product_fit == "affordable":
             pitch_implications = [
-                "EliseAI Affordable Housing product is the right fit",
+                "Affordable housing context may be relevant to outreach",
                 "Emphasize fair housing compliance and multilingual support",
                 "Highlight cost reduction for budget-constrained operators",
                 "51-language support critical for diverse resident base",
             ]
-        elif eliseai_product_fit == "workforce":
+        elif target_product_fit == "workforce":
             pitch_implications = [
                 "Workforce housing operators need automation at low cost",
                 "Emphasize operational efficiency and staff reduction",
@@ -402,7 +402,7 @@ class HUDService:
             "affordable_housing_signal":    affordable_signal,
             "affordable_confidence":        affordable_confidence,
             "affordable_evidence":          affordable_evidence,
-            "eliseai_product_fit":          eliseai_product_fit,
+            "target_product_fit":          target_product_fit,
             "pitch_implications":           pitch_implications,
 
             "data_source": "HUD Fair Market Rents & Income Limits API",
@@ -438,7 +438,7 @@ class HUDService:
             "affordable_housing_signal":    False,
             "affordable_confidence":        "unknown",
             "affordable_evidence":          [],
-            "eliseai_product_fit":          "unknown",
+            "target_product_fit":          "unknown",
             "pitch_implications":           [],
             "data_source":                  "unavailable",
         }

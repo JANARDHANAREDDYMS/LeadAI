@@ -17,7 +17,7 @@ class MarketAgent(BaseAgent):
     - FRED          → rent trends, unemployment, population growth
     - HUD           → fair market rents, affordable vs conventional
 
-    Answers: "Is this city a good market for EliseAI?"
+    Answers: "What market context may matter to an SDR researching this lead?"
 
     Outputs:
     1. Renter population + density
@@ -25,9 +25,9 @@ class MarketAgent(BaseAgent):
     3. Rent growth trend (FRED national)
     4. Employment health (FRED)
     5. Population growth (FRED dynamic)
-    6. EliseAI product line signal (HUD + Census)
+    6. Housing category signal (HUD + Census)
     7. Market health score (0-100)
-    8. Leasing intensity score (0-100) — EliseAI specific
+    8. Leasing intensity score (0-100)
     9. Automation urgency
     """
 
@@ -177,20 +177,20 @@ class MarketAgent(BaseAgent):
             "📌"
         )
 
-        # ── 6. EliseAI Product Line Signal ──────────────────
+        # ── 6. target Product Line Signal ──────────────────
         median_income       = census_data.get("median_household_income", 0)
         asset_type_signal   = census_data.get("asset_type_signal", "unknown")
         fmr_data            = hud_data.get("fmr_data") or {}
         fmr_2br             = fmr_data.get("fmr_2br", 0)
         affordable_signal   = hud_data.get("affordable_housing_signal", False)
-        hud_product_fit     = hud_data.get("eliseai_product_fit", "unknown")
+        hud_product_fit     = hud_data.get("target_product_fit", "unknown")
 
         product_line = self._determine_product_line(
             fmr_2br, median_income, renter_percentage, city
         )
 
         emit(
-            f"6. EliseAI product line: {product_line['product_line']}",
+            f"6. target product line: {product_line['product_line']}",
             f"FMR 2BR: ${fmr_2br} | "
             f"Median income: ${median_income:,} | "
             f"Pitch: {product_line['pitch_focus']}",
@@ -342,8 +342,8 @@ class MarketAgent(BaseAgent):
             "asset_type_signal":        asset_type_signal,
             "fmr_2br":                  fmr_2br,
             "affordable_signal":        affordable_signal,
-            "eliseai_product_line":     product_line["product_line"],
-            "eliseai_pitch_focus":      product_line["pitch_focus"],
+            "target_product_line":     product_line["product_line"],
+            "target_pitch_focus":      product_line["pitch_focus"],
             "product_line_evidence":    product_line["evidence"],
 
             # 7. Market health
@@ -379,9 +379,8 @@ class MarketAgent(BaseAgent):
         city: str,
     ) -> dict:
         """
-        Determine EliseAI product line from market signals.
-        Maps to EliseAI's actual product lines:
-        Conventional, Student Housing, Affordable, Single-Family
+        Classify the housing market from available signals:
+        conventional, student housing, affordable, or single-family.
         """
 
         # Student housing markets
@@ -445,7 +444,7 @@ class MarketAgent(BaseAgent):
     ) -> str:
         """
         Combine all market signals into automation urgency.
-        High urgency = leasing teams overwhelmed = urgent EliseAI need.
+        High urgency indicates that local market conditions may add operational pressure.
         """
         score = 0
 
@@ -494,8 +493,8 @@ class MarketAgent(BaseAgent):
                 "asset_type_signal":        "unknown",
                 "fmr_2br":                  0,
                 "affordable_signal":        False,
-                "eliseai_product_line":     "unknown",
-                "eliseai_pitch_focus":      "",
+                "target_product_line":     "unknown",
+                "target_pitch_focus":      "",
                 "product_line_evidence":    "",
                 "market_health_score":      0,
                 "market_health":            "unknown",

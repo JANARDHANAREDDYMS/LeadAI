@@ -37,7 +37,7 @@ export default function ScoreBreakdownPanel({ lead }) {
             <Zap size={18} className="text-spruce" aria-hidden="true" />
             <div className="mt-3 flex items-center gap-1.5">
             <p className="label">Pitch angle</p>
-            <InfoTooltip text="The framing angle used to position EliseAI" />
+            <InfoTooltip text="The framing angle used to personalize the outreach" />
           </div>
             <p className="mt-2 text-sm leading-6 text-ink/68">
               {enrichment.pitch_angle || "Pending outreach signal"}

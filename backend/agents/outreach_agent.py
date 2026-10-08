@@ -9,23 +9,15 @@ from config import get_settings
 logger = logging.getLogger(__name__)
 
 
-OUTREACH_SYSTEM_PROMPT = """You are an expert SDR at EliseAI writing 
-cold outreach emails to residential property managers.
-
-ABOUT ELISEAI:
-EliseAI automates leasing communication, maintenance requests, 
-and resident operations for property managers.
-- Backed by Andreessen Horowitz $250M Series E
-- Customers: Greystar, AvalonBay, Equity Residential, 500+ operators
-- Integrates natively with Yardi, Entrata, OneSite, RealPage
-- Deploys in 30 days alongside existing systems
+OUTREACH_SYSTEM_PROMPT = """You help SDRs write personalized cold outreach
+to prospective customers using verified lead research.
 
 EMAIL STRUCTURE — follow this exactly:
 1. SIGNAL    → open with ONE specific signal you found
                (hiring, tech gap, market pressure, growth)
 2. INSIGHT   → interpret what that signal MEANS for them
                THIS IS YOUR EDGE — show operational understanding
-3. SOFT PITCH → connect EliseAI naturally, don't hard sell
+3. RELEVANCE → connect a verified prospect need to the sender's offering
 4. CTA       → one low-friction ask (15-min call, quick question)
 
 TONE RULES:
@@ -35,7 +27,7 @@ TONE RULES:
 - Short — under 120 words for first email
 - Never say "I hope this email finds you well"
 - Never use "synergies", "leverage", "cutting-edge", "game-changer"
-- Never mention AI generically — say exactly what EliseAI does
+- Never invent product capabilities, customer claims, or proof points
 - Never start with "I" — start with the signal
 
 SIGNAL PRIORITY (use strongest available):
@@ -81,12 +73,8 @@ GOOD: "Adding properties without proportional headcount
        is exactly where leasing velocity starts to slip — 
        more doors, same team, more after-hours inquiries"
 
-PROOF POINTS TO USE:
-- "AvalonBay runs EliseAI across 290+ properties alongside Yardi"
-- "Equity Residential reduced leasing response time by 80%"
-- "Backed by a16z — $250M Series E"
-- "Deploys in 30 days, works alongside your existing Yardi/Entrata stack"
-- "500+ operators, including the top 10 NMHC managers"
+PROOF POINTS:
+Use only facts explicitly provided by the sender or verified in lead research.
 
 SUBJECT LINE RULES:
 - Under 8 words
@@ -137,19 +125,13 @@ RETURN ONLY VALID JSON — no markdown, no preamble:
   "word_count": 0
 }"""
 
-REGENERATE_SYSTEM_PROMPT = """You are an expert SDR at EliseAI 
+REGENERATE_SYSTEM_PROMPT = """You help SDRs write personalized outreach
 rewriting a cold outreach email based on SDR feedback.
-
-ABOUT ELISEAI:
-- Automates leasing communication and maintenance for property managers
-- Backed by a16z $250M Series E
-- Customers: Greystar, AvalonBay, Equity Residential, 500+ operators
-- Native integrations: Yardi, Entrata, OneSite, RealPage
 
 EMAIL STRUCTURE — always maintain:
 1. SIGNAL    → specific signal (hiring/tech gap/growth/market)
 2. INSIGHT   → operational interpretation showing expertise  
-3. SOFT PITCH → natural EliseAI connection
+3. RELEVANCE → connect a verified prospect need to the sender's offering
 4. CTA       → one low-friction ask
 
 Apply the SDR feedback exactly as requested.
@@ -377,7 +359,7 @@ Keep Signal → Insight → Soft pitch → CTA structure.
         # Determine strongest signal
         leasing_jobs     = company_data.get("leasing_jobs", 0)
         maintenance_jobs = company_data.get("maintenance_jobs", 0)
-        eliseai_tools    = company_data.get("eliseai_integrations", [])
+        target_tools    = company_data.get("target_integrations", [])
         proptech         = company_data.get("proptech_detected", [])
         is_expanding     = company_data.get("is_expanding", False)
         leasing_intensity = market_data.get("leasing_intensity", "")
@@ -387,14 +369,14 @@ Keep Signal → Insight → Soft pitch → CTA structure.
             primary_signal = f"HIRING: {leasing_jobs} leasing roles + {maintenance_jobs} maintenance roles open"
         elif not proptech:
             primary_signal = "TECH GAP: No PropTech detected — likely manual operations"
-        elif eliseai_tools:
-            primary_signal = f"TECH GAP: Uses {eliseai_tools} but no leasing automation yet"
+        elif target_tools:
+            primary_signal = f"TECH GAP: Uses {target_tools} but no leasing automation yet"
         elif is_expanding:
             primary_signal = "GROWTH: Active expansion detected"
         elif leasing_intensity == "high":
             primary_signal = f"MARKET: High leasing intensity in {market_data.get('city')}"
         else:
-            primary_signal = "FIT: Residential operator matching EliseAI ICP"
+            primary_signal = "FIT: Residential operator matching the selected customer profile"
 
         return f"""
 Write a cold outreach email using this enrichment data.
@@ -410,7 +392,7 @@ STRONGEST SIGNAL TO LEAD WITH:
 
 COMPANY CONTEXT:
 - Size: {company_data.get('company_size')} | Units: {company_data.get('units_managed')}
-- EliseAI integrations: {eliseai_tools or 'none detected'}
+- target integrations: {target_tools or 'none detected'}
 - PropTech stack: {proptech or 'none detected'}
 - Tech maturity: Level {company_data.get('tech_maturity_level')}
 - Pain points: {company_data.get('pain_points', [])}
@@ -419,7 +401,7 @@ COMPANY CONTEXT:
 MARKET CONTEXT:
 - City: {market_data.get('city')}, {market_data.get('state')}
 - Leasing intensity: {leasing_intensity}
-- Product line: {market_data.get('eliseai_product_line')}
+- Product line: {market_data.get('target_product_line')}
 
 SCORING INSIGHTS:
 - Pitch angle: {insights.get('pitch_angle', '')}

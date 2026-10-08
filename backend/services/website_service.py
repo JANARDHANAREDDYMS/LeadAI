@@ -144,7 +144,7 @@ class WebsiteService:
         pitch_implications = []
         if has_esg:
             pitch_implications.append(
-                "Emphasize EliseAI reduces paper-based processes "
+                "Emphasize relevant workflow improvements only when supported by research "
                 "and eliminates unnecessary site visits"
             )
         if has_dei:

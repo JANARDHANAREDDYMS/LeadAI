@@ -72,12 +72,12 @@ function ProfileSection() {
         </label>
 
         <label className="block">
-          <span className="label">EliseAI email</span>
+          <span className="label">Work email</span>
           <input
             className="mt-2 w-full rounded border border-ink/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-spruce/60 focus:ring-2 focus:ring-spruce/15"
             name="email"
             onChange={update}
-            placeholder="you@eliseai.com"
+            placeholder="you@company.com"
             type="email"
             value={form.email}
           />
@@ -88,7 +88,7 @@ function ProfileSection() {
             <div className="mb-4 rounded border border-steel/15 bg-paper/70 p-4">
               <p className="label mb-2">Signature preview</p>
               <pre className="whitespace-pre-wrap font-sans text-sm leading-6 text-ink/70">
-                {`Best,\n${form.name || "Your Name"}\n\n${form.title || "Your Title"}, EliseAI\n${form.email || "you@eliseai.com"}`}
+                {`Best,\n${form.name || "Your Name"}\n\n${form.title || "Your Title"}\n${form.email || "you@company.com"}`}
               </pre>
             </div>
           )}

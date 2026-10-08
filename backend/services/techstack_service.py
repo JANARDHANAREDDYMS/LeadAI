@@ -10,8 +10,8 @@ from utils.step_emitter import StepEmitter
 logger = logging.getLogger(__name__)
 
 
-# ── PropTech EliseAI integrates with ───────────────────────────
-ELISEAI_INTEGRATIONS = [
+# ── Property management platforms ─────────────────────────────
+target_INTEGRATIONS = [
     "yardi", "realpage", "entrata", "appfolio",
     "mri software", "resman", "knock", "funnel",
     "onesite", "buildium", "rent manager",
@@ -88,7 +88,7 @@ class TechStackService:
     → No scraping needed, real-time data
 
     Used by Company Agent to determine:
-    - EliseAI integration opportunities
+    - property management platform adoption
     - Tech sophistication of the company
     - Outreach talking points
     """
@@ -195,7 +195,7 @@ class TechStackService:
             # Final score
             emit(
                 f"Tech forward score: {result['tech_forward_score']}/100",
-                f"EliseAI integrations: {result['eliseai_integrations'] or 'none detected'}",
+                f"Property management platforms: {result['target_integrations'] or 'none detected'}",
                 "🎯"
             )
 
@@ -452,29 +452,29 @@ class TechStackService:
             level = 4
             label = "Advanced"
             description = "Full enterprise tech stack — understands software ROI deeply"
-            eliseai_angle = "Lead with integration story and ROI metrics"
+            target_angle = "Lead with integration story and ROI metrics"
         elif score >= 50:
             level = 3
             label = "Established"
             description = "Multi-tool stack — tech-forward operator"
-            eliseai_angle = "Lead with efficiency gains and existing integrations"
+            target_angle = "Lead with efficiency gains and existing integrations"
         elif score >= 25:
             level = 2
             label = "Basic"
             description = "Single PMS tool — has started digitizing"
-            eliseai_angle = "Lead with ease of implementation alongside existing PMS"
+            target_angle = "Lead with ease of implementation alongside existing PMS"
         else:
             level = 1
             label = "Manual"
             description = "No tech detected — likely manual operations"
-            eliseai_angle = "Lead with ROI and time savings — be educational"
+            target_angle = "Lead with ROI and time savings — be educational"
 
         return {
             "level":        level,
             "label":        label,
             "score":        score,
             "description":  description,
-            "eliseai_angle": eliseai_angle,
+            "target_angle": target_angle,
             "evidence":     evidence,
         }
     # ── Step 5: Synthesize ──────────────────────────────────────
@@ -511,9 +511,9 @@ class TechStackService:
         integration_signals = job_tech.get("integration", [])
         adoption_signals    = job_tech.get("adoption", [])
         
-        # ── EliseAI integration matches ─────────────────────
-        eliseai_integrations = [
-            tool for tool in ELISEAI_INTEGRATIONS
+        # ── Property management platform matches ────────────
+        target_integrations = [
+            tool for tool in target_INTEGRATIONS
             if tool in all_proptech
         ]
 
@@ -521,7 +521,7 @@ class TechStackService:
         backend_signals = job_tech.get("backend", [])
 
         tech_score = 0
-        if eliseai_integrations:    tech_score += 40
+        if target_integrations:    tech_score += 40
         if ai_signals:              tech_score += 25
         if all_crm:                 tech_score += 15
         if integration_signals:     tech_score += 10
@@ -538,10 +538,10 @@ class TechStackService:
         # ── Talking points ──────────────────────────────────
         talking_points = []
 
-        if eliseai_integrations:
-            for tool in eliseai_integrations:
+        if target_integrations:
+            for tool in target_integrations:
                 talking_points.append(
-                    f"EliseAI has native integration with "
+                    f"Uses "
                     f"{tool.title()} — zero disruption to "
                     f"existing workflow"
                 )
@@ -556,16 +556,16 @@ class TechStackService:
             talking_points.append(
                 "Hiring Systems Adoption roles — "
                 "actively implementing new software, "
-                "ideal timing for EliseAI conversation"
+                "potential timing signal for relevant outreach"
             )
 
         if all_crm:
             talking_points.append(
                 f"Uses {all_crm[0].title()} CRM — "
-                f"EliseAI can sync lead data directly"
+                "may support connected lead workflows"
             )
 
-        if not eliseai_integrations and not is_ai_aware:
+        if not target_integrations and not is_ai_aware:
             talking_points.append(
                 "No PropTech detected in job postings — "
                 "opportunity to be first AI automation partner"
@@ -592,9 +592,9 @@ class TechStackService:
             "integration_tools":        integration_signals,
             "adoption_signals":         adoption_signals,
 
-            # EliseAI specific
-            "eliseai_integrations":     eliseai_integrations,
-            "has_eliseai_integration":  len(eliseai_integrations) > 0,
+            # Property management platform signals
+            "target_integrations":     target_integrations,
+            "has_target_integration":  len(target_integrations) > 0,
             "is_ai_aware":              is_ai_aware,
             "is_adopting_new_software": is_adopting_new_software,
 
@@ -646,8 +646,8 @@ class TechStackService:
             "data_tools":               [],
             "integration_tools":        [],
             "adoption_signals":         [],
-            "eliseai_integrations":     [],
-            "has_eliseai_integration":  False,
+            "target_integrations":     [],
+            "has_target_integration":  False,
             "is_ai_aware":              False,
             "is_adopting_new_software": False,
             "tech_forward_score":       0,

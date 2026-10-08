@@ -127,7 +127,7 @@ export default function SalesInsightsPanel({ lead }) {
                 <div ref={hookColRef}>
                   <div className="mb-3 flex items-center gap-1.5">
                     <p className="label">Integration hook</p>
-                    <InfoTooltip text="How EliseAI fits into their existing tech stack" />
+                    <InfoTooltip text="How the prospect's existing tech stack relates to their needs" />
                   </div>
                   <div className="rounded border border-spruce/60 bg-spruce/5 p-4">
                     <p className="text-sm leading-6 text-ink/70">{integrationHook}</p>

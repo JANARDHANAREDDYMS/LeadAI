@@ -11,10 +11,10 @@ TECH_STACK_TOOL = ToolDefinition(
     description=(
         "Detect technology stack from company job postings. "
         "Returns PropTech tools (Yardi, RealPage, Entrata, OneSite), "
-        "CRM tools, EliseAI integration matches, "
+        "CRM tools, property management platform matches, "
         "and tech maturity level 1-4. "
         "Call this for ALL residential real estate companies. "
-        "EliseAI integrates natively with Yardi, Entrata, OneSite."
+        "Identify detected platforms so SDRs can verify integration fit."
     ),
     input_schema={
         "type": "object",
@@ -42,9 +42,9 @@ async def execute_tech_stack(
 
         clean = {
             "proptech_detected":     result.get("proptech_detected", []),
-            "eliseai_integrations":  result.get("eliseai_integrations", []),
-            "has_eliseai_integration": result.get(
-                "has_eliseai_integration", False
+            "target_integrations":  result.get("target_integrations", []),
+            "has_target_integration": result.get(
+                "has_target_integration", False
             ),
             "crm_tools":             result.get("crm_tools", []),
             "cloud_tools":           result.get("cloud_tools", []),

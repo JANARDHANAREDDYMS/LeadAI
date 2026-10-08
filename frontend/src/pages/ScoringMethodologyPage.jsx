@@ -23,9 +23,9 @@ const DIMENSIONS = [
     label: "Fit",
     max: 25,
     color: "bg-emerald-500",
-    description: "How closely does the prospect match EliseAI's ideal customer profile?",
+    description: "How closely does the prospect match the target customer profile?",
     signals: [
-      { name: "Residential focus", detail: "EliseAI is purpose-built for residential property management. Mixed-use or commercial operators score lower." },
+      { name: "Residential focus", detail: "Residential property operators are the current target segment. Mixed-use or commercial operators score lower." },
       { name: "Unit count", detail: "50–5,000 units is the sweet spot. Too small = budget risk. Too large = enterprise complexity." },
       { name: "Native integrations", detail: "Yardi, Entrata, OneSite, or RealPage in the stack means a 30-day deployment with no rip-and-replace." },
       { name: "Company size", detail: "10–500 employee operators have budget authority and a clear decision-making structure." },
@@ -45,7 +45,7 @@ const DIMENSIONS = [
     description: "How ready is the prospect to evaluate and buy right now?",
     signals: [
       { name: "Active expansion", detail: "Acquiring properties or entering new markets means new leasing capacity is needed immediately." },
-      { name: "Tech gap with existing PropTech", detail: "Using Yardi or Entrata but missing leasing automation means they already believe in PropTech — just haven't found EliseAI yet." },
+      { name: "Tech gap with existing PropTech", detail: "Using Yardi or Entrata but missing leasing automation can indicate an opportunity to improve their current workflow." },
       { name: "Recent funding or growth event", detail: "Fundraises and major portfolio announcements signal budget availability and a window for new tooling decisions." },
       { name: "Lease-up phase", detail: "New construction in lease-up needs to fill units fast — automation directly drives revenue velocity." },
     ],
@@ -117,8 +117,8 @@ export default function ScoringMethodologyPage() {
         </button>
         <h1 className="text-2xl font-semibold tracking-normal text-graphite">Lead Scoring Methodology</h1>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-ink/60">
-          Every lead is scored 0–100 across five weighted dimensions. The score reflects how urgently EliseAI
-          should be in front of this operator — not just whether they're a fit, but whether now is the right moment.
+          Every lead is scored 0–100 across five weighted dimensions. The score reflects how strong the opportunity is
+          and whether current signals make this a good time for outreach.
         </p>
       </div>
 

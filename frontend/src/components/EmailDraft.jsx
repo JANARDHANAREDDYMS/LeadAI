@@ -5,8 +5,8 @@ import { loadProfile } from "../pages/SettingsPage";
 function buildSignature(profile) {
   const name  = profile.name  || "Your Name";
   const title = profile.title || "Sales Development Representative";
-  const email = profile.email || "you@eliseai.com";
-  return `\n\n--\nBest,\n${name}\n\n${title}, EliseAI\n${email}`;
+  const email = profile.email || "you@company.com";
+  return `\n\n--\nBest,\n${name}\n\n${title}\n${email}`;
 }
 
 // Strip any sign-off the LLM may have included before we append the real signature
